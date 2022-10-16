@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+ 
+  <style>
+       .logLines {
+          border: solid;
+       }
+       .logLines .odd {
+          background-color: #DDDDDD;
+       }
+
+  </style>
+  <script>
+      Vue.component('log-main', {
+        template: '#log-main',
+        data: function () {
+            return {
+              body: <%- JSON.stringify(body, null, 2) %>,
+              items : [],
+            };
+        },
+        methods: {
+        },
+        mounted() {
+            console.log(`the component is now mounted.`, this.body);
+            this.items = parseLog(this.body.logContent, this.body.regexStr);
+        }
+    });
+  </script>
+  <script src="logViewer/logViewerHandler.js" ></script>
+
+</head>
+<body>
+
+<script type="x-template" id="log-main">
+   <div>
+        <h1>Log viewer</h1>
+        <div v-if="items.length>0">
+                <h2>Log analysis result</h2> 
+                <p>Click on the links on the right to see details in Console.</p>
+                <div class="logLines" >
+                  <div v-for="(item, idx) in items"  
+                      :class="(idx%2)? 'odd' : 'even' " >
+                      <log-line v-bind:line="item"></log-line>
+                  </div>
+                </div>
+        </div>
+    </div>
+</script>
+
+<script type="x-template" id="log-line">
+   <div class="row">
+        <div class="col-10">{{linePreview}}</div>
+        <div class="col-1">
+                <button  v-if="buttonText" 
+                         class="btn btn-link"
+                        @click="openInConsole()" >
+                         {{buttonText}}
+                </button>
+        </div>
+   </div>
+</script>
+            
+
+
+
+<div class="container" id="vue-app">
+        <log-main></log-main>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</body>
+</html>
+
