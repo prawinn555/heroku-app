@@ -101,7 +101,7 @@ function containJson(line) {
     if(line.type ) {
         return line.type==='json';
     } 
-    let d = line.subelements.join(' ');
+    let d = line.subelements.join(' ').replaceAll('\r','');
     let jsonData = d.match(jsonRegex);
     if(jsonData && jsonData[0] ) {
         line.jsonData = jsonData[0];
